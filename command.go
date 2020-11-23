@@ -1,4 +1,4 @@
-package fy
+package fx
 
 import (
 	"os"
