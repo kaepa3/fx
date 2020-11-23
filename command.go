@@ -26,13 +26,17 @@ func init() {
 	}
 }
 
-func OrderCommandFactory(oanda *goanda.OandaConnection) (cli.Command, error) {
+func OrderCommandFactory(c Config, o *goanda.OandaConnection) (cli.Command, error) {
 	return &orderCommand{
-		ui: Ui,
+		ui:    Ui,
+		oanda: o,
+		conf:  c,
 	}, nil
 }
-func InstrumentsCommandFactory(oanda *goanda.OandaConnection) (cli.Command, error) {
-	return &orderCommand{
-		ui: Ui,
+func InstrumentsCommandFactory(c Config, o *goanda.OandaConnection) (cli.Command, error) {
+	return &instrumentsCommand{
+		ui:    Ui,
+		oanda: o,
+		conf:  c,
 	}, nil
 }

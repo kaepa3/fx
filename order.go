@@ -6,22 +6,32 @@ import (
 	"github.com/mitchellh/cli"
 )
 
-type ordercommand struct {
-	ui    cli.ui
-	oanda *goanda.oandaconnection
+type orderCommand struct {
+	ui    cli.Ui
+	oanda *goanda.OandaConnection
+	conf  Config
 }
 
-func (c *ordercommand) run(args []string) {
-	order := goanda.orderpayload{
-		order: goanda.orderbody{
-			units:        10000,
-			instrument:   "usd_jpy",
-			timeinforce:  "gtc",
-			type:         "market",
-			positionfill: "default",
-			price:        "1.25000",
+func (c *orderCommand) Run(args []string) int {
+	order := goanda.OrderPayload{
+		Order: goanda.OrderBody{
+			Units:        10000,
+			Instrument:   "USD_JPY",
+			TimeInForce:  "GTC",
+			Type:         "MARKET",
+			PositionFill: "DEFAULT",
+			Price:        "1.25000",
 		},
 	}
-	orderresult := oanda.createorder(order)
-	spew.dump("%+v\n", orderresult)
+	orderresult := c.oanda.CreateOrder(order)
+	spew.Dump("%+v\n", orderresult)
+	return 0
+}
+
+func (c *orderCommand) Help() string {
+	return "no help"
+}
+
+func (c *orderCommand) Synopsis() string {
+	return "no help"
 }

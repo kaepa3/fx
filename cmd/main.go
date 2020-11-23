@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/BurntSushi/toml"
 	"github.com/awoldes/goanda"
 	"github.com/kaepa3/fx"
 	"github.com/mitchellh/cli"
@@ -12,7 +11,7 @@ import (
 
 func main() {
 
-	conf, err := LoadConfit("./token.toml")
+	conf, err := fx.LoadConfig("./token.toml")
 	if err != nil {
 		log.Println(err)
 		return
@@ -22,11 +21,15 @@ func main() {
 	accountID := conf.Account
 	oanda := goanda.NewConnection(accountID, key, false)
 
-	c := cli.NewCLI("fx-py", "version 1")
+	c := cli.NewCLI("fx", "version 1")
 	c.Args = os.Args[1:]
 	c.Commands = map[string]cli.CommandFactory{
-		"order":       fx.OrderCommandFactory(oanda),
-		"instruments": fx.InstrumentsCommandFactory(oanda),
+		"order": func() (cli.Command, error) {
+			return fx.OrderCommandFactory(*conf, oanda)
+		},
+		"instruments": func() (cli.Command, error) {
+			return fx.InstrumentsCommandFactory(*conf, oanda)
+		},
 	}
 
 	exitCode, err := c.Run()
@@ -35,18 +38,4 @@ func main() {
 	}
 
 	os.Exit(exitCode)
-}
-
-type Config struct {
-	Token   string
-	Account string
-}
-
-func LoadConfit(path string) (*Config, error) {
-	var config Config
-	_, err := toml.DecodeFile(path, &config)
-	if err != nil {
-		return nil, err
-	}
-	return &config, nil
 }
