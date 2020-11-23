@@ -22,8 +22,6 @@ func main() {
 	oanda := goanda.NewConnection(accountID, key, false)
 
 	if len(os.Args) <= 1 {
-		accountInstruments := oanda.GetAccountInstruments(accountID)
-		spew.Dump(accountInstruments)
 		return
 	}
 	cmd := os.Args[1]
