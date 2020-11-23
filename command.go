@@ -33,6 +33,13 @@ func OrderCommandFactory(c Config, o *goanda.OandaConnection) (cli.Command, erro
 		conf:  c,
 	}, nil
 }
+func CandleCommandFactory(c Config, o *goanda.OandaConnection) (cli.Command, error) {
+	return &candleCommand{
+		ui:    Ui,
+		oanda: o,
+		conf:  c,
+	}, nil
+}
 func InstrumentsCommandFactory(c Config, o *goanda.OandaConnection) (cli.Command, error) {
 	return &instrumentsCommand{
 		ui:    Ui,

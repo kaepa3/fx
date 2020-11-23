@@ -24,11 +24,14 @@ func main() {
 	c := cli.NewCLI("fx", "version 1")
 	c.Args = os.Args[1:]
 	c.Commands = map[string]cli.CommandFactory{
-		"order": func() (cli.Command, error) {
+		"ORDER": func() (cli.Command, error) {
 			return fx.OrderCommandFactory(*conf, oanda)
 		},
-		"instruments": func() (cli.Command, error) {
+		"INST": func() (cli.Command, error) {
 			return fx.InstrumentsCommandFactory(*conf, oanda)
+		},
+		"CANDLE": func() (cli.Command, error) {
+			return fx.CandleCommandFactory(*conf, oanda)
 		},
 	}
 
